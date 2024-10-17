@@ -8,6 +8,7 @@
 import Foundation
 
 class Preferences {
+    
     static func saveProgress(for topic: Topic) {
         UserDefaults.standard.set(topic.isLessonRead, forKey: "\(topic.title)_lesson")
         // Add other states as needed

@@ -11,6 +11,7 @@ struct Topic: Identifiable {
     var id = UUID()
     var title: String
     var vocabulary: [VocabularyWord]
+    var QuizQuestions: [QuizQuestion]
     var lesson: String
     var isLessonRead: Bool
     var isFlashcardsCompleted: Bool
@@ -28,11 +29,11 @@ struct QuizQuestion: Identifiable {
     var question: String
     var options: [String]
     var correctAnswer: String
-    var timeBonus: Int
 }
 
 struct QuizResult {
     var score: Int
     var isCompleted: Bool
+    var timeBonus: Int
 }
 
