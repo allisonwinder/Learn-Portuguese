@@ -51,7 +51,7 @@ struct TopicLessonView: View {
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
-            NavigationLink(destination: FlashcardView( topic: topic )) {
+            NavigationLink(destination: FlashcardView( viewModel: LanguageViewModel() , topic: topic )) {
                 Text("Practice with flashcards")
                     .font(.headline)
                     .padding()

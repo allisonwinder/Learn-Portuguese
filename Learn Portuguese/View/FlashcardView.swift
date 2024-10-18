@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FlashcardView: View {
+    @State var viewModel: LanguageViewModel
     @State private var isFlipped = false
     @State private var currentIndex = 0 // To track the current word in the vocabulary list
     let topic: Topic
@@ -74,6 +75,6 @@ struct FlashcardView: View {
         isQuizCompleted: false
     )
     
-    FlashcardView(topic: exampleTopic)
+    FlashcardView(viewModel: LanguageViewModel(), topic: exampleTopic )
 }
 

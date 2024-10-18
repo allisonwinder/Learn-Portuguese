@@ -13,7 +13,7 @@ import Foundation
     
     //MARK: - Properties
     private var currentFlashcards: [VocabularyWord] = []
-    var currentQui: [QuizQuestion] = []
+    var currentQuiz: [QuizQuestion] = []
     var currentQuestionIndex = 0
     private var score = 0
     private var timeBonus = 0
@@ -346,11 +346,6 @@ import Foundation
     
     //MARK: - Helpers
     
-    // Shuffle flashcards for a topic
-    func shuffleFlashcards(for topic: Topic) {
-        currentFlashcards = topic.vocabulary.shuffled()
-    }
-    
     // Handle quiz scoring and time bonus
     func handleQuizAnswer(isCorrect: Bool, elapsedTime: Int) {
         if isCorrect {
@@ -363,6 +358,11 @@ import Foundation
     }
     
     //MARK: - Private Helpers
+    
+    func shuffledVocabulary(for topic: Topic) -> [VocabularyWord]
+        {
+            return topic.vocabulary.shuffled()
+        }
 }
 
 
