@@ -13,9 +13,6 @@ struct Topic: Identifiable {
     var vocabulary: [VocabularyWord]
     var QuizQuestions: [QuizQuestion]
     var lesson: String
-    var isLessonRead: Bool
-    var isFlashcardsCompleted: Bool
-    var isQuizCompleted: Bool
 }
 
 struct VocabularyWord: Identifiable {
@@ -31,9 +28,12 @@ struct QuizQuestion: Identifiable {
     var correctAnswer: String
 }
 
-struct QuizResult {
-    var score: Int
-    var isCompleted: Bool
-    var timeBonus: Int
+struct Results {
+    var topicTitle: String
+    var quizScore: Int
+    var isQuizCompleted: Bool
+    var quizTimeBonus: Int
+    var isLessonRead: Bool
+    var isFlashcardsCompleted: Bool
 }
 

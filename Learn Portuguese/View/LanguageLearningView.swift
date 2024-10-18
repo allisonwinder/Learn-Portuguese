@@ -34,35 +34,7 @@ struct TopicCell: View {
     }
 }
 
-struct TopicLessonView: View {
-    let topic: Topic
-    
-    var body: some View {
-        VStack(spacing: 20) {
-                    Text("Learn this \(topic.title) lesson!")
-                        .font(.title)
-                    Text("\(topic.lesson)")
-                        .padding()
-            NavigationLink(destination: QuizView( topic: topic )) {
-                        Text("Take the quiz")
-                            .font(.headline)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-            NavigationLink(destination: FlashcardView( viewModel: LanguageViewModel() , topic: topic )) {
-                Text("Practice with flashcards")
-                    .font(.headline)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-                }
-                .padding()
-    }
-}
+
 
 #Preview {
     LanguageLearningView(languageViewModel: LanguageViewModel())

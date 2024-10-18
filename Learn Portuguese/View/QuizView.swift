@@ -49,13 +49,18 @@ struct QuizView: View {
             Text("Score: \(score)")
                 .font(.title)
                 .padding()
+            
+            Pie(startAngle: Angle(degrees: 360-90), endAngle: Angle(degrees: 105-90))
+                .foregroundStyle(.orange)
+                .opacity(0.4)
+                .padding()
 
             // Bonus time countdown animation
-            ProgressView(value: Double(timeBonus), total: 20.0)
-                .progressViewStyle(CircularProgressViewStyle())
-                .onAppear {
-                    startBonusCountdown()
-                }
+//            ProgressView(value: Double(timeBonus), total: 20.0)
+//                .progressViewStyle(CircularProgressViewStyle())
+//                .onAppear {
+//                    startBonusCountdown()
+//                }
 
             Spacer()
 
@@ -95,7 +100,7 @@ struct QuizView: View {
             resetState()
         } else {
             showScore = true
-            topic.isQuizCompleted = true // Mark quiz as completed in the topic
+            //topic.isQuizCompleted = true // Mark quiz as completed in the topic
         }
     }
 
@@ -144,9 +149,6 @@ struct QuizView: View {
                                       ],
                                       lesson: """
                                       There are many basic greetings and farewells in Portuguese. Especially Brazilian speakers love to include a greeting at every chance they talk to you. Some vocabulary that you will be learning in this module includes: Olá (Hello), Adeus (Goodbye), Bom dia (Good morning), Boa tarde (Good afternoon), Boa noite (Good night), Como você está? (How are you?), Estou bem (I am fine), and Até logo (See you later).
-                                      """,
-                                      isLessonRead: false,
-                                      isFlashcardsCompleted: false,
-                                      isQuizCompleted: false))
+                                      """))
 }
 

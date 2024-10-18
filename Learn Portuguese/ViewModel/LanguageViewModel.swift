@@ -48,10 +48,7 @@ import Foundation
             ],
             lesson: """
             There are many basic greetings and farewells in Portuguese. Especially Brazilian speakers love to include a greeting at every chance they talk to you. Some vocabulary that you will be learning in this module includes: Olá (Hello), Adeus (Goodbye), Bom dia (Good morning), Boa tarde (Good afternoon), Boa noite (Good night), Como você está? (How are you?), Estou bem (I am fine), and Até logo (See you later).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
         
         Topic(
@@ -79,10 +76,7 @@ import Foundation
             ],
             lesson: """
             Common phrases in Portuguese include essential words for daily communication. Some of the vocabulary you will learn includes: Por favor (Please), Obrigado/Obrigada (Thank you), De nada (You're welcome), Desculpe (I'm sorry), Quanto custa? (How much does it cost?), Onde está...? (Where is...?), and Eu gostaria (I would like).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
 
         Topic(
@@ -113,10 +107,7 @@ import Foundation
             ],
             lesson: """
             Learning numbers is crucial when speaking Portuguese. In this module, you will cover the basics, including numbers from 1 to 10: Um (1), Dois (2), Três (3), Quatro (4), Cinco (5), Seis (6), Sete (7), Oito (8), Nove (9), and Dez (10).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
         Topic(
             title: "Colors",
@@ -144,10 +135,7 @@ import Foundation
             ],
             lesson: """
             Colors are an essential part of any language. In Portuguese, you will learn the following colors: Vermelho (Red), Azul (Blue), Amarelo (Yellow), Verde (Green), Preto (Black), Branco (White), Roxo (Purple), and Laranja (Orange).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
 
         Topic(
@@ -176,10 +164,7 @@ import Foundation
             ],
             lesson: """
             Learn the words for family members in Portuguese: Pai (Father), Mãe (Mother), Irmão (Brother), Irmã (Sister), Avô (Grandfather), Avó (Grandmother), Tio (Uncle), and Tia (Aunt).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
 
         Topic(
@@ -208,10 +193,7 @@ import Foundation
             ],
             lesson: """
             In this topic, you will learn the names of common food and drinks: Água (Water), Pão (Bread), Leite (Milk), Carne (Meat), Fruta (Fruit), Café (Coffee), Peixe (Fish), and Ovo (Egg).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
         Topic(
             title: "Common Adjectives",
@@ -241,10 +223,7 @@ import Foundation
             ],
             lesson: """
             In this lesson, you will learn common adjectives in Portuguese: Grande (Big), Pequeno (Small), Bonito (Beautiful), Feio (Ugly), Feliz (Happy), Triste (Sad), Interessante (Interesting), Chato (Boring), Legal (Cool), and Bom (Good).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
 
         Topic(
@@ -273,10 +252,7 @@ import Foundation
             ],
             lesson: """
             Learn the days of the week in Portuguese: Segunda-feira (Monday), Terça-feira (Tuesday), Quarta-feira (Wednesday), Quinta-feira (Thursday), Sexta-feira (Friday), Sábado (Saturday), Domingo (Sunday), and Semana (Week).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
 
         Topic(
@@ -304,10 +280,7 @@ import Foundation
             ],
             lesson: """
             In this topic, you will learn common weather phrases: Está ensolarado (It's sunny), Está frio (It's cold), Está nublado (It's cloudy), Está chovendo (It's raining), Está nevando (It's snowing), Está calor (It's hot), and Clima (Weather).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         ),
         Topic(
             title: "Common Verbs",
@@ -337,12 +310,10 @@ import Foundation
             ],
             lesson: """
             In this lesson, you will learn common verbs in Portuguese: Ser (To be - permanent), Estar (To be - temporary), Ter (To have), Fazer (To do/make), Ir (To go), Comer (To eat), Beber (To drink), Falar (To speak), Saber (To know), and Poder (To can).
-            """,
-            isLessonRead: false,
-            isFlashcardsCompleted: false,
-            isQuizCompleted: false
+            """
         )
     ]
+    
     
     //MARK: - Helpers
     
@@ -358,11 +329,7 @@ import Foundation
     }
     
     //MARK: - Private Helpers
-    
-    func shuffledVocabulary(for topic: Topic) -> [VocabularyWord]
-        {
-            return topic.vocabulary.shuffled()
-        }
+
 }
 
 

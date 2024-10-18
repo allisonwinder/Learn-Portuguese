@@ -11,34 +11,77 @@ struct FlashcardView: View {
     @State var viewModel: LanguageViewModel
     @State private var isFlipped = false
     @State private var currentIndex = 0 // To track the current word in the vocabulary list
+    @State var contentRotation = 0.0
     let topic: Topic
-    
+
     var body: some View {
-        ZStack {
-            if isFlipped {
-                Text(topic.vocabulary[currentIndex].word)
-                    .font(.largeTitle)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            } else {
-                Text(topic.vocabulary[currentIndex].translation)
-                    .font(.largeTitle)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(10)
+        VStack {
+            TabView(selection: $currentIndex) {
+                ForEach(0..<topic.vocabulary.count, id: \.self) { index in
+                    ZStack {
+                        // Background gradient
+                        let gradientColors = isFlipped ? [Color.blue, Color.purple] : [Color.green, Color.teal]
+                        
+                        VStack {
+                            Text(isFlipped ? topic.vocabulary[index].word : topic.vocabulary[index].translation)
+                                .font(.largeTitle)
+                                .bold()
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
+                        }
+                        .frame(width: 300, height: 200) // Adjust the frame size for a compact look
+                        .background(LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(20)
+                        .shadow(radius: 10)
+                        .padding(.horizontal, 20)
+                        .rotation3DEffect(
+                            .degrees(isFlipped ? 180 : 0),
+                            axis: (x: 0, y: 1, z: 0)
+                        )
+                    }
+                    .tag(index)
+                }
             }
-        }
-        .onTapGesture {
-            withAnimation {
-                isFlipped.toggle()
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .onTapGesture {
+                withAnimation(Animation.linear(duration: 0.5)) {
+                    contentRotation = isFlipped ? 0.0 : 180.0
+                    isFlipped.toggle()
+                }
             }
+            .onAppear {
+                // Optionally shuffle cards on appear if desired
+                // topic.vocabulary.shuffle()
+            }
+            .onChange(of: currentIndex) { newIndex in
+                // Reset the flip state when the user swipes to a new card
+                withAnimation {
+                    isFlipped = false
+                }
+            }
+
+            // Completion Toggle
+//            Toggle(isOn: Binding(
+//                get: {
+//                    // Get the completion status from the topic
+//                    topic.isFlashcardsCompleted
+//                },
+//                set: { newValue in
+//                    // Update the completion status in the view model
+//                    if let index = viewModel.topics.firstIndex(where: { $0.id == topic.id }) {
+//                        viewModel.topics[index].isFlashcardsCompleted = newValue
+//                    }
+//                }
+//            )) {
+//                Text("Finished Flashcards")
+//                    .font(.headline)
+//            }
+            .padding()
         }
-        .onLongPressGesture {
-            // Move to the next word when long-pressed
-            currentIndex = (currentIndex + 1) % topic.vocabulary.count
-            isFlipped = false // Reset to show the word side when moving to the next card
-        }
+        .padding()
     }
 }
 
@@ -69,12 +112,8 @@ struct FlashcardView: View {
         ],
         lesson: """
         There are many basic greetings and farewells in Portuguese. Especially Brazilian speakers love to include a greeting at every chance they talk to you. Some vocabulary that you will be learning in this module includes: Olá (Hello), Adeus (Goodbye), Bom dia (Good morning), Boa tarde (Good afternoon), Boa noite (Good night), Como você está? (How are you?), Estou bem (I am fine), and Até logo (See you later).
-        """,
-        isLessonRead: false,
-        isFlashcardsCompleted: false,
-        isQuizCompleted: false
+        """
     )
     
     FlashcardView(viewModel: LanguageViewModel(), topic: exampleTopic )
 }
-
