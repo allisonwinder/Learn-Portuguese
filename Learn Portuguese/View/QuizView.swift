@@ -15,6 +15,7 @@ struct QuizView: View {
     @State private var showScore = false
     @State private var selectedOption: String? = nil
     @State private var timeBonus = 20
+    let viewModel = LanguageViewModel()
     
     var body: some View {
         VStack {
@@ -88,6 +89,7 @@ struct QuizView: View {
 
     // Function to handle the answer selection
     private func handleAnswer() {
+        viewModel.handleAnswer(isAnswerCorrect: isAnswerCorrect)
         if isAnswerCorrect {
             score += 1
         }

@@ -13,6 +13,7 @@ import Foundation
     
     //MARK: - Properties
     private var currentFlashcards: [VocabularyWord] = []
+    private var soundPlayer = SoundPlayer()
     var currentQuiz: [QuizQuestion] = []
     var currentQuestionIndex = 0
     private var score = 0
@@ -21,6 +22,18 @@ import Foundation
     //MARK: - Model Access
     
     //MARK: - User Intents
+    func handleAnswer(isAnswerCorrect: Bool) {
+        if isAnswerCorrect {
+            Task {
+                await soundPlayer.playSound(named: "correct-6033.mp3")
+            }
+        } else {
+            Task {
+                await soundPlayer.playSound(named: "wrong-47985.mp3")
+            }
+        }
+    }
+    
     let topics: [Topic] = [
         Topic(
             title: "Basic Greetings and Farewells",

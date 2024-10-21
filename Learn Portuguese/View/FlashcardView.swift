@@ -60,6 +60,7 @@ struct FlashcardView: View {
                 // Reset the flip state when the user swipes to a new card
                 withAnimation {
                     isFlipped = false
+                    contentRotation = isFlipped ? 180.0 : 0
                 }
             }
 
