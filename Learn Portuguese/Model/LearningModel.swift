@@ -32,7 +32,6 @@ struct Results {
     var topicTitle: String
     var quizScore: Int
     var isQuizCompleted: Bool
-    var quizTimeBonus: Int
     var isLessonRead: Bool
     var isFlashcardsCompleted: Bool
 }

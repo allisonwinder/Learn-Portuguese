@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TopicLessonView: View {
     let topic: Topic
+    let result: Results
     
     var body: some View {
         VStack(spacing: 20) {
@@ -24,7 +25,7 @@ struct TopicLessonView: View {
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
-            NavigationLink(destination: FlashcardView( viewModel: LanguageViewModel() , topic: topic )) {
+            NavigationLink(destination: FlashcardView( viewModel: LanguageViewModel() , topic: topic,  result: result)) {
                 Text("Practice with flashcards")
                     .font(.headline)
                     .padding()
@@ -63,5 +64,11 @@ struct TopicLessonView: View {
                                       ],
                                       lesson: """
                                       There are many basic greetings and farewells in Portuguese. Especially Brazilian speakers love to include a greeting at every chance they talk to you. Some vocabulary that you will be learning in this module includes: Olá (Hello), Adeus (Goodbye), Bom dia (Good morning), Boa tarde (Good afternoon), Boa noite (Good night), Como você está? (How are you?), Estou bem (I am fine), and Até logo (See you later).
-                                      """))
+                                      """), result: Results (
+                                        topicTitle: "Basic Greetings and Farewells",
+                                        quizScore: 0,
+                                        isQuizCompleted: false,
+                                        isLessonRead: false,
+                                        isFlashcardsCompleted: false
+                                    ))
 }
