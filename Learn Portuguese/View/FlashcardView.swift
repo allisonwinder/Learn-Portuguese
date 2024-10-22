@@ -11,6 +11,7 @@ struct FlashcardView: View {
     @State var viewModel: LanguageViewModel
     @State private var isFlipped = false
     @State private var currentIndex = 0 // To track the current word in the vocabulary list
+    @State var shuffledCards: [VocabularyWord] = []
     @State private var topicResult: Results?
     @State var contentRotation = 0.0
     let topic: Topic
@@ -24,13 +25,13 @@ struct FlashcardView: View {
                     .padding()
             }
             TabView(selection: $currentIndex) {
-                ForEach(0..<topic.vocabulary.count, id: \.self) { index in
+                ForEach(0..<shuffledCards.count, id: \.self) { index in
                     ZStack {
                         // Background gradient
                         let gradientColors = isFlipped ? [Color.blue, Color.purple] : [Color.green, Color.teal]
                         
                         VStack {
-                            Text(isFlipped ? topic.vocabulary[index].word : topic.vocabulary[index].translation)
+                            Text(isFlipped ? shuffledCards[index].word : shuffledCards[index].translation)
                                 .font(.largeTitle)
                                 .bold()
                                 .foregroundColor(.white)
@@ -61,7 +62,7 @@ struct FlashcardView: View {
             }
             .onAppear {
                 // Optionally shuffle cards on appear if desired
-                // topic.vocabulary.shuffled()
+                shuffledCards = topic.vocabulary.shuffled()
                 topicResult = getTopicResult(topic)
             }
             .onChange(of: currentIndex) { newIndex in
