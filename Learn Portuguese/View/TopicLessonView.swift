@@ -10,6 +10,7 @@ import SwiftUI
 struct TopicLessonView: View {
     let topic: Topic
     let result: Results
+    let viewModel: LanguageViewModel
     
     var body: some View {
         VStack(spacing: 20) {
@@ -21,7 +22,7 @@ struct TopicLessonView: View {
                         Text("Take the quiz")
                             .font(.headline)
                             .padding()
-                            .background(Color.blue)
+                            .background(.blue)
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
@@ -29,9 +30,16 @@ struct TopicLessonView: View {
                 Text("Practice with flashcards")
                     .font(.headline)
                     .padding()
-                    .background(Color.blue)
+                    .background(.blue)
                     .foregroundColor(.white)
                     .cornerRadius(8)
+            }
+            Button {
+                viewModel.toggleLessonRead(for: topic.title)
+            }
+            label : {
+                Text("Lesson read: \(viewModel.results(for: topic.title).isLessonRead)")
+                    .font(.subheadline)
             }
                 }
                 .padding()
@@ -70,5 +78,5 @@ struct TopicLessonView: View {
                                         isQuizCompleted: false,
                                         isLessonRead: false,
                                         isFlashcardsCompleted: false
-                                    ))
+                                      ), viewModel: LanguageViewModel())
 }

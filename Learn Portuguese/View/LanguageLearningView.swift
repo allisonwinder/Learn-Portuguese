@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LanguageLearningView: View {
-    @State var languageViewModel = LanguageViewModel()
+    var languageViewModel = LanguageViewModel()
     
     var body: some View {
         NavigationStack {
@@ -29,17 +29,17 @@ struct TopicCell: View {
         HStack {
             NavigationLink {
                 // Passing the result dynamically to TopicLessonView
-                TopicLessonView(topic: topic, result: getTopicResult(for: topic))
+                TopicLessonView(topic: topic, result: viewModel.results(for: topic.title), viewModel: viewModel)
             } label: {
-                Text(topic.title)
+                VStack(alignment: .leading) {
+                    Text(topic.title)
+                        .font(.headline)
+                        Text("Lesson read: \(viewModel.results(for: topic.title).isLessonRead)")
+                        .font(.subheadline)
+                        .foregroundColor(.purple)
+                }
             }
         }
-    }
-    
-    // Function to get the result for the specific topic dynamically
-    private func getTopicResult(for topic: Topic) -> Results {
-        // Search for the result matching the topic's title in the viewModel
-        return viewModel.results.first(where: { $0.topicTitle == topic.title }) ?? Results(topicTitle: topic.title, quizScore: 0, isQuizCompleted: false, isLessonRead: false, isFlashcardsCompleted: false)
     }
 }
 

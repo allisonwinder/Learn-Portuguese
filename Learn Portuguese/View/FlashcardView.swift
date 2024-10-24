@@ -58,7 +58,7 @@ struct FlashcardView: View {
             .onAppear {
                 // Optionally shuffle cards on appear if desired
                 shuffledCards = topic.vocabulary.shuffled()
-                topicResult = getTopicResult(topic)
+                //topicResult = getTopicResult(topic)
             }
             .onChange(of: currentIndex) {
                 // Reset the flip state when the user swipes to a new card
@@ -68,35 +68,36 @@ struct FlashcardView: View {
                 }
             }
             
-        if let unwrappedTopicResult = topicResult {
-            ZStack(alignment: .center) {
-                    Text("Flashcards Completed:")
-                        .foregroundColor(.black)
-                    
-                    Toggle(isOn: Binding(
-                        get: { unwrappedTopicResult.isFlashcardsCompleted },
-                        set: { newValue in
-                            if let index = viewModel.results.firstIndex(where: { $0.topicTitle == topic.title }) {
-                                viewModel.results[index].isFlashcardsCompleted = newValue
-                            }
-                        }
-                    )) {
-                    }
-                    .toggleStyle(SwitchToggleStyle())
-                    .padding()
-                    
-                }
-            .frame(alignment: .center)
-            Spacer()
-        }
+//        if let unwrappedTopicResult = topicResult {
+//            ZStack(alignment: .center) {
+//                    Text("Flashcards Completed:")
+//                        .foregroundColor(.black)
+//                    
+//                    Toggle(isOn: Binding(
+//                        get: { unwrappedTopicResult.isFlashcardsCompleted },
+//                        set: { newValue in
+//                            if let index = viewModel.results.firstIndex(where: { $0.topicTitle == topic.title }) {
+//                                viewModel.results[index].isFlashcardsCompleted = newValue
+//                            }
+//                        }
+//                    )) {
+//                        Text(unwrappedTopicResult.isFlashcardsCompleted ? "Yes" : "No")
+//                            .foregroundColor(.black)
+//                    }
+//                    .toggleStyle(SwitchToggleStyle())
+//                    .padding()
+//                    .frame(alignment: .center)
+//                }
+//            Spacer()
+//        }
             // Completion status display
 
     }
     
-    private func getTopicResult(_ topic: Topic) -> Results? {
-        // Search for the result matching the topic's title
-        return viewModel.results.first(where: { $0.topicTitle == topic.title })
-    }
+//    func getTopicResult(_ topic: Topic) -> Results? {
+//        // Search for the result matching the topic's title
+//        return viewModel.results.first(where: { $0.topicTitle == topic.title })
+//    }
 }
 
 #Preview {
@@ -129,7 +130,7 @@ struct FlashcardView: View {
         """
     )
     
-    var exampleResults =  Results (
+    let exampleResults =  Results (
         topicTitle: "Basic Greetings and Farewells",
         quizScore: 0,
         isQuizCompleted: false,
