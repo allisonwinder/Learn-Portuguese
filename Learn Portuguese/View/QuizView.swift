@@ -18,6 +18,7 @@ struct QuizView: View {
     @State private var animatedBonusRemaining = 0.0
     @State private var isCorrectAnimation = false
     @State private var isWrongAnimation = false
+    @State private var questionsCorrect = 0
     
     let viewModel = LanguageViewModel()
     
@@ -91,7 +92,11 @@ struct QuizView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        Text("Quiz Completed: \(viewModel.results(for: topic.title).isQuizCompleted)")
+        .font(.subheadline)
+        .foregroundColor(.purple)
     }
+
 
     // Function to calculate the angle for the pie
     private func angle(for percentOfCircle: Double) -> Angle {
@@ -106,6 +111,7 @@ struct QuizView: View {
             score += 10.0 + bonus
             stopTimer() // Stop the timer when the correct answer is given
             triggerCorrectAnimation()
+            questionsCorrect += 1
         } else {
             triggerWrongAnimation()
         }
@@ -118,6 +124,10 @@ struct QuizView: View {
             resetState()
         } else {
             showScore = true
+            if questionsCorrect == topic.QuizQuestions.count {
+                viewModel.toggleQuizCompleted(for: topic.title)
+            }
+            viewModel.quizHighScore(for: topic.title, score: Double(score))
         }
     }
 
@@ -140,7 +150,7 @@ struct QuizView: View {
                 remainingTime -= 0.1
                 animatedBonusRemaining = remainingTime / 10.0
             } else {
-                stopTimer()
+                stopTimer() 
             }
         }
     }

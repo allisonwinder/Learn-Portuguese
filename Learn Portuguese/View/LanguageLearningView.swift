@@ -15,7 +15,7 @@ struct LanguageLearningView: View {
             List(languageViewModel.topics) { topic in
                 TopicCell(topic: topic, viewModel: languageViewModel)
             }
-            .navigationTitle("Learn Portuguese!")
+            .navigationTitle("Learn \(languageViewModel.languageName)!")
             .listStyle(.automatic)
         }
     }
@@ -37,6 +37,15 @@ struct TopicCell: View {
                         Text("Lesson read: \(viewModel.results(for: topic.title).isLessonRead)")
                         .font(.subheadline)
                         .foregroundColor(.purple)
+                    Text("Quiz Completed: \(viewModel.results(for: topic.title).isQuizCompleted)")
+                    .font(.subheadline)
+                    .foregroundColor(.purple)
+                    Text("Flashcards Completed: \(viewModel.results(for: topic.title).isFlashcardsCompleted)")
+                    .font(.subheadline)
+                    .foregroundColor(.purple)
+                    Text("Quiz High Score: \(String(format: "%.2f", viewModel.results(for: topic.title).quizScore ?? 0 ))")
+                    .font(.subheadline)
+                    .foregroundColor(.purple)
                 }
             }
         }

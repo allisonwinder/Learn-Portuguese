@@ -13,6 +13,9 @@ protocol LessonPlan {
     var results: [Results] { get set }
     
     mutating func toggleLessonRead (for title: String)
+    mutating func toggleFlashcardsCompleted (for title: String)
+    mutating func toggleQuizCompleted (for title: String)
+    mutating func quizHighScore (for title: String, score: Double)
 }
 
 struct Topic: Identifiable {
@@ -38,7 +41,7 @@ struct QuizQuestion: Identifiable {
 
 struct Results {
     let topicTitle: String
-    var quizScore: Int?
+    var quizScore: Double?
     var isQuizCompleted = false
     var isLessonRead = false
     var isFlashcardsCompleted = false
@@ -77,6 +80,44 @@ struct PortugueseLessonPlan: LessonPlan {
         }
     }
     
+    mutating func toggleFlashcardsCompleted (for title: String) {
+        if let index = results.firstIndex(where: {$0.topicTitle == title }) {
+            results[index].isFlashcardsCompleted.toggle()
+            UserDefaults.standard.set(results[index].isFlashcardsCompleted, forKey: key(for: title, type: Key.isFlashcardsCompleted))
+        } else {
+            results.append(Results(topicTitle: title))
+            toggleFlashcardsCompleted(for: title)
+        }
+    }
+    
+    mutating func toggleQuizCompleted (for title: String) {
+        if let index = results.firstIndex(where: {$0.topicTitle == title }) {
+            results[index].isQuizCompleted.toggle()
+            UserDefaults.standard.set(results[index].isQuizCompleted, forKey: key(for: title, type:
+                                                                                    Key.isQuizzesCompleted))
+        } else {
+            results.append(Results(topicTitle: title))
+            toggleQuizCompleted(for: title)
+        }
+    }
+    
+    mutating func quizHighScore(for title: String, score: Double) {
+        let currentHighScore = UserDefaults.standard.double(forKey: key(for: title, type: Key.quizScore))
+        
+        if score > currentHighScore {
+            // Update UserDefaults with the new high score
+            UserDefaults.standard.set(score, forKey: key(for: title, type: Key.quizScore))
+            
+            // Update the results array
+            if let index = results.firstIndex(where: { $0.topicTitle == title }) {
+                results[index].quizScore = score
+            } else {
+                results.append(Results(topicTitle: title, quizScore: score))
+            }
+        }
+    }
+
+    
     private static func readResultsRecords () -> [Results] {
         var resultsRecords = [Results]()
         
@@ -87,7 +128,17 @@ struct PortugueseLessonPlan: LessonPlan {
                 forKey: key(for: topic.title, type: Key.isLessonRead)
             )
             
-            //implement for other three progress items
+            resultRecord.isFlashcardsCompleted = UserDefaults.standard.bool(
+                forKey: key(for: topic.title, type: Key.isFlashcardsCompleted)
+            )
+            
+            resultRecord.isQuizCompleted = UserDefaults.standard.bool(
+                forKey: key(for: topic.title, type: Key.isQuizzesCompleted)
+            )
+            
+            resultRecord.quizScore = UserDefaults.standard.double(
+                forKey: key(for: topic.title, type: Key.quizScore)
+            )
             
             resultsRecords.append(resultRecord)
         }

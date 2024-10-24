@@ -60,6 +60,18 @@ import Foundation
         lessonPlan.toggleLessonRead(for: title)
     }
     
+    func toggleFlashcardsCompleted(for title: String) {
+        lessonPlan.toggleFlashcardsCompleted(for: title)
+    }
+    
+    func toggleQuizCompleted(for title: String) {
+        lessonPlan.toggleQuizCompleted(for: title)
+    }
+    
+    func quizHighScore(for title: String, score: Double) {
+        lessonPlan.quizHighScore(for: title, score: score )
+    }
+    
 //    init() {
 //        self.results = [
 //            Results(

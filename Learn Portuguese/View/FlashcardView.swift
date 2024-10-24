@@ -12,92 +12,67 @@ struct FlashcardView: View {
     @State private var isFlipped = false
     @State private var currentIndex = 0 // To track the current word in the vocabulary list
     @State var shuffledCards: [VocabularyWord] = []
-    @State private var topicResult: Results?
     @State var contentRotation = 0.0
     let topic: Topic
-    var result: Results
+    //var result: Results
 
     var body: some View {
-
-            TabView(selection: $currentIndex) {
-                ForEach(0..<shuffledCards.count, id: \.self) { index in
-                    ZStack {
-                        // Background gradient
-                        let gradientColors = isFlipped ? [Color.blue, Color.purple] : [Color.green, Color.teal]
-                        
-                        VStack {
-                            Text(isFlipped ? shuffledCards[index].word : shuffledCards[index].translation)
-                                .font(.largeTitle)
-                                .bold()
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-                                .padding()
-                                .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
-                        }
-                        .frame(width: 300, height: 200) // Adjust the frame size for a compact look
-                        .background(LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(20)
-                        .shadow(radius: 10)
-                        .padding(.horizontal, 20)
-                        .rotation3DEffect(
-                            .degrees(isFlipped ? 180 : 0),
-                            axis: (x: 0, y: 1, z: 0)
-                        )
+        
+        TabView(selection: $currentIndex) {
+            ForEach(0..<shuffledCards.count, id: \.self) { index in
+                ZStack {
+                    // Background gradient
+                    let gradientColors = isFlipped ? [Color.blue, Color.purple] : [Color.green, Color.teal]
+                    
+                    VStack {
+                        Text(isFlipped ? shuffledCards[index].word : shuffledCards[index].translation)
+                            .font(.largeTitle)
+                            .bold()
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
                     }
-                    .tag(index)
+                    .frame(width: 300, height: 200) // Adjust the frame size for a compact look
+                    .background(LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .top, endPoint: .bottom))
+                    .cornerRadius(20)
+                    .shadow(radius: 10)
+                    .padding(.horizontal, 20)
+                    .rotation3DEffect(
+                        .degrees(isFlipped ? 180 : 0),
+                        axis: (x: 0, y: 1, z: 0)
+                    )
                 }
+                .tag(index)
             }
-            .tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .onTapGesture {
-                withAnimation(Animation.linear(duration: 0.5)) {
-                    contentRotation = isFlipped ? 0.0 : 180.0
-                    isFlipped.toggle()
-                }
+        }
+        .tabViewStyle(.page)
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .onTapGesture {
+            withAnimation(Animation.linear(duration: 0.5)) {
+                contentRotation = isFlipped ? 0.0 : 180.0
+                isFlipped.toggle()
             }
-            .onAppear {
-                // Optionally shuffle cards on appear if desired
-                shuffledCards = topic.vocabulary.shuffled()
-                //topicResult = getTopicResult(topic)
+        }
+        .onAppear {
+            // Optionally shuffle cards on appear if desired
+            shuffledCards = topic.vocabulary.shuffled()
+        }
+        .onChange(of: currentIndex) {
+            // Reset the flip state when the user swipes to a new card
+            withAnimation {
+                isFlipped = false
+                contentRotation = isFlipped ? 180.0 : 0
             }
-            .onChange(of: currentIndex) {
-                // Reset the flip state when the user swipes to a new card
-                withAnimation {
-                    isFlipped = false
-                    contentRotation = isFlipped ? 180.0 : 0
-                }
-            }
-            
-//        if let unwrappedTopicResult = topicResult {
-//            ZStack(alignment: .center) {
-//                    Text("Flashcards Completed:")
-//                        .foregroundColor(.black)
-//                    
-//                    Toggle(isOn: Binding(
-//                        get: { unwrappedTopicResult.isFlashcardsCompleted },
-//                        set: { newValue in
-//                            if let index = viewModel.results.firstIndex(where: { $0.topicTitle == topic.title }) {
-//                                viewModel.results[index].isFlashcardsCompleted = newValue
-//                            }
-//                        }
-//                    )) {
-//                        Text(unwrappedTopicResult.isFlashcardsCompleted ? "Yes" : "No")
-//                            .foregroundColor(.black)
-//                    }
-//                    .toggleStyle(SwitchToggleStyle())
-//                    .padding()
-//                    .frame(alignment: .center)
-//                }
-//            Spacer()
-//        }
-            // Completion status display
-
+        }
+        Button {
+            viewModel.toggleFlashcardsCompleted(for: topic.title)
+        }
+        label : {
+            Text("Flashcards Completed: \(viewModel.results(for: topic.title).isFlashcardsCompleted)")
+                .font(.subheadline)
+        }
     }
-    
-//    func getTopicResult(_ topic: Topic) -> Results? {
-//        // Search for the result matching the topic's title
-//        return viewModel.results.first(where: { $0.topicTitle == topic.title })
-//    }
 }
 
 #Preview {
@@ -130,13 +105,5 @@ struct FlashcardView: View {
         """
     )
     
-    let exampleResults =  Results (
-        topicTitle: "Basic Greetings and Farewells",
-        quizScore: 0,
-        isQuizCompleted: false,
-        isLessonRead: false,
-        isFlashcardsCompleted: false
-    )
-    
-    FlashcardView(viewModel: LanguageViewModel(), topic: exampleTopic, result: exampleResults )
+    FlashcardView(viewModel: LanguageViewModel(), topic: exampleTopic )
 }
