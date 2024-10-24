@@ -35,12 +35,3 @@ struct Results: Codable {
     var isLessonRead: Bool
     var isFlashcardsCompleted: Bool
 }
-
-//MARK: - Constants
-
-private struct Score {
-    static let baseQuestionValue = 1
-    static let bonusFactor = 1.0
-    static let maxBonusTime = 10.0
-}
-

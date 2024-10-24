@@ -81,7 +81,6 @@ struct FlashcardView: View {
                             }
                         }
                     )) {
-
                     }
                     .toggleStyle(SwitchToggleStyle())
                     .padding()

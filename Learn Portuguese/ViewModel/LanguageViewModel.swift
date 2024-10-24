@@ -94,7 +94,7 @@ import Foundation
                 Common phrases in Portuguese include essential words for daily communication. Some of the vocabulary you will learn includes: Por favor (Please), Obrigado/Obrigada (Thank you), De nada (You're welcome), Desculpe (I'm sorry), Quanto custa? (How much does it cost?), Onde está...? (Where is...?), and Eu gostaria (I would like).
                 """
             ),
-
+            
             Topic(
                 title: "Numbers (1-10)",
                 vocabulary: [
@@ -153,7 +153,7 @@ import Foundation
                 Colors are an essential part of any language. In Portuguese, you will learn the following colors: Vermelho (Red), Azul (Blue), Amarelo (Yellow), Verde (Green), Preto (Black), Branco (White), Roxo (Purple), and Laranja (Orange).
                 """
             ),
-
+            
             Topic(
                 title: "Family Members",
                 vocabulary: [
@@ -182,7 +182,7 @@ import Foundation
                 Learn the words for family members in Portuguese: Pai (Father), Mãe (Mother), Irmão (Brother), Irmã (Sister), Avô (Grandfather), Avó (Grandmother), Tio (Uncle), and Tia (Aunt).
                 """
             ),
-
+            
             Topic(
                 title: "Food and Drink",
                 vocabulary: [
@@ -241,7 +241,7 @@ import Foundation
                 In this lesson, you will learn common adjectives in Portuguese: Grande (Big), Pequeno (Small), Bonito (Beautiful), Feio (Ugly), Feliz (Happy), Triste (Sad), Interessante (Interesting), Chato (Boring), Legal (Cool), and Bom (Good).
                 """
             ),
-
+            
             Topic(
                 title: "Days of the Week",
                 vocabulary: [
@@ -270,7 +270,7 @@ import Foundation
                 Learn the days of the week in Portuguese: Segunda-feira (Monday), Terça-feira (Tuesday), Quarta-feira (Wednesday), Quinta-feira (Thursday), Sexta-feira (Friday), Sábado (Saturday), Domingo (Sunday), and Semana (Week).
                 """
             ),
-
+            
             Topic(
                 title: "Weather Vocabulary",
                 vocabulary: [
@@ -330,32 +330,86 @@ import Foundation
             )
         ]
         
-        self.results = topics.map { topic in
+        self.results = [
             Results(
-                topicTitle: topic.title,
+                topicTitle: "Basic Greetings and Farewells",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Common Phrases",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Numbers (1-10)",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Colors",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Family Members",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Food and Drink",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Common Adjectives",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Days of the Week",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Weather Vocabulary",
+                quizScore: 0,
+                isQuizCompleted: false,
+                isLessonRead: false,
+                isFlashcardsCompleted: false
+            ),
+            Results(
+                topicTitle: "Common Verbs",
                 quizScore: 0,
                 isQuizCompleted: false,
                 isLessonRead: false,
                 isFlashcardsCompleted: false
             )
-        }
+        ]
     }
+    
+    
     
     
     
     
     //MARK: - Helpers
-    
-    // Handle quiz scoring and time bonus
-    func handleQuizAnswer(isCorrect: Bool, elapsedTime: Int) {
-        if isCorrect {
-            score += 10
-            let bonus = max(0, (20 - elapsedTime) / 2)
-            timeBonus += bonus
-            score += bonus
-        }
-        // Move to the next question or finish quiz
-    }
     
     //MARK: - Private Helpers
 
