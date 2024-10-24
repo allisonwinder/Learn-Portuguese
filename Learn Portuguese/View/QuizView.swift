@@ -4,17 +4,21 @@
 //
 //  Created by IS 543 on 10/15/24.
 //
-
 import SwiftUI
 
 struct QuizView: View {
     @State var topic: Topic
     @State private var currentQuestionIndex = 0
-    @State private var score = 0
+    @State private var score = 0.0
     @State private var isAnswerCorrect = false
     @State private var showScore = false
     @State private var selectedOption: String? = nil
-    @State private var timeBonus = 20
+    @State private var remainingTime = 10.0
+    @State private var timer: Timer? = nil
+    @State private var animatedBonusRemaining = 0.0
+    @State private var isCorrectAnimation = false
+    @State private var isWrongAnimation = false
+    
     let viewModel = LanguageViewModel()
     
     var body: some View {
@@ -43,25 +47,27 @@ struct QuizView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.horizontal)
+                        .scaleEffect(isAnswerCorrect && selectedOption == option ? isCorrectAnimation ? 1.15 : 1 : isWrongAnimation && selectedOption == option ? 0.8 : 1)
+                        .animation(.spring(), value: isCorrectAnimation || isWrongAnimation)
                 }
             }
 
             // Display the current score
-            Text("Score: \(score)")
+            Text("Score: \(String(format: "%.2f", score))")
                 .font(.title)
                 .padding()
-            
-            Pie(startAngle: Angle(degrees: 360-90), endAngle: Angle(degrees: 105-90))
-                .foregroundStyle(.orange)
-                .opacity(0.4)
-                .padding()
 
-            // Bonus time countdown animation
-//            ProgressView(value: Double(timeBonus), total: 20.0)
-//                .progressViewStyle(CircularProgressViewStyle())
-//                .onAppear {
-//                    startBonusCountdown()
-//                }
+            // Animated pie for bonus time
+            Pie(
+                startAngle: angle(for: 0),
+                endAngle: angle(for: -animatedBonusRemaining)
+            )
+            .onAppear {
+                startTimer()
+            }
+            .foregroundStyle(.orange)
+            .opacity(0.4)
+            .padding()
 
             Spacer()
 
@@ -81,17 +87,27 @@ struct QuizView: View {
         .alert(isPresented: $showScore) {
             Alert(
                 title: Text("Quiz Completed"),
-                message: Text("Your score: \(score)"),
+                message: Text("Your score: \(String(format: "%.2f", score))"),
                 dismissButton: .default(Text("OK"))
             )
         }
+    }
+
+    // Function to calculate the angle for the pie
+    private func angle(for percentOfCircle: Double) -> Angle {
+        Angle.degrees(percentOfCircle * 360 - 90)
     }
 
     // Function to handle the answer selection
     private func handleAnswer() {
         viewModel.handleAnswer(isAnswerCorrect: isAnswerCorrect)
         if isAnswerCorrect {
-            score += 1
+            let bonus = remainingTime // Bonus based on remaining time
+            score += 10.0 + bonus
+            stopTimer() // Stop the timer when the correct answer is given
+            triggerCorrectAnimation()
+        } else {
+            triggerWrongAnimation()
         }
     }
 
@@ -102,7 +118,6 @@ struct QuizView: View {
             resetState()
         } else {
             showScore = true
-            //topic.isQuizCompleted = true // Mark quiz as completed in the topic
         }
     }
 
@@ -110,20 +125,47 @@ struct QuizView: View {
     private func resetState() {
         selectedOption = nil
         isAnswerCorrect = false
-        timeBonus = 20
+        remainingTime = 10.0
+        animatedBonusRemaining = 1.0
+        startTimer()
+        isCorrectAnimation = false
+        isWrongAnimation = false
     }
 
-    // Function to start bonus countdown
-    private func startBonusCountdown() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            if timeBonus > 0 {
-                timeBonus -= 1
+    // Function to start the timer
+    private func startTimer() {
+        animatedBonusRemaining = 1.0
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            if remainingTime > 0 {
+                remainingTime -= 0.1
+                animatedBonusRemaining = remainingTime / 10.0
             } else {
-                timer.invalidate()
+                stopTimer()
             }
         }
     }
+
+    // Function to stop the timer
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    // Trigger correct answer animation
+    private func triggerCorrectAnimation() {
+        withAnimation(.easeIn(duration: 0.5)) {
+            isCorrectAnimation = true
+        }
+    }
+
+    // Trigger wrong answer animation
+    private func triggerWrongAnimation() {
+        withAnimation(.easeOut(duration: 0.3)) {
+            isWrongAnimation = true
+        }
+    }
 }
+
 
 #Preview {
     QuizView(topic: Topic(            title: "Basic Greetings and Farewells",

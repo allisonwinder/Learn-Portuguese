@@ -19,7 +19,7 @@ import Foundation
     private var score = 0
     private var timeBonus = 0
     let topics: [Topic]
-    let results: [Results]
+    var results: [Results]
     
     //MARK: - Model Access
     

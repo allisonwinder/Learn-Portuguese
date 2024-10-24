@@ -15,15 +15,10 @@ struct FlashcardView: View {
     @State private var topicResult: Results?
     @State var contentRotation = 0.0
     let topic: Topic
-    let result: Results
+    var result: Results
 
     var body: some View {
-        VStack {
-            if let topicResult = topicResult {
-                // You can display the results data in the view, for example:
-                Text("Flashcards Completed: \(topicResult.isFlashcardsCompleted ? "Yes" : "No")")
-                    .padding()
-            }
+
             TabView(selection: $currentIndex) {
                 ForEach(0..<shuffledCards.count, id: \.self) { index in
                     ZStack {
@@ -65,7 +60,7 @@ struct FlashcardView: View {
                 shuffledCards = topic.vocabulary.shuffled()
                 topicResult = getTopicResult(topic)
             }
-            .onChange(of: currentIndex) { newIndex in
+            .onChange(of: currentIndex) {
                 // Reset the flip state when the user swipes to a new card
                 withAnimation {
                     isFlipped = false
@@ -73,29 +68,33 @@ struct FlashcardView: View {
                 }
             }
             
-            // Completion status display
-            Text("This is completed: \(String(result.isFlashcardsCompleted))")
-            
-            // Completion Toggle for flashcards (optional)
-//            Toggle(isOn: Binding(
-//                get: {
-//                    result.isFlashcardsCompleted
-//                },
-//                set: { newValue in
-//                    if let index = viewModel.results.firstIndex(where: { $0.topicTitle == topic.title }) {
-//                        viewModel.results[index].isFlashcardsCompleted = newValue
-//                    }
-//                }
-//            )) {
-//                Text("Finished Flashcards")
-//                    .font(.headline)
-//            }
-//            .padding()
+        if let unwrappedTopicResult = topicResult {
+            ZStack(alignment: .center) {
+                    Text("Flashcards Completed:")
+                        .foregroundColor(.black)
+                    
+                    Toggle(isOn: Binding(
+                        get: { unwrappedTopicResult.isFlashcardsCompleted },
+                        set: { newValue in
+                            if let index = viewModel.results.firstIndex(where: { $0.topicTitle == topic.title }) {
+                                viewModel.results[index].isFlashcardsCompleted = newValue
+                            }
+                        }
+                    )) {
+
+                    }
+                    .toggleStyle(SwitchToggleStyle())
+                    .padding()
+                    
+                }
+            .frame(alignment: .center)
+            Spacer()
         }
-        .padding()
+            // Completion status display
+
     }
     
-    func getTopicResult(_ topic: Topic) -> Results? {
+    private func getTopicResult(_ topic: Topic) -> Results? {
         // Search for the result matching the topic's title
         return viewModel.results.first(where: { $0.topicTitle == topic.title })
     }

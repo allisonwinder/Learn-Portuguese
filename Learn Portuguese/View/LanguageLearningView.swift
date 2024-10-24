@@ -37,7 +37,7 @@ struct TopicCell: View {
     }
     
     // Function to get the result for the specific topic dynamically
-    func getTopicResult(for topic: Topic) -> Results {
+    private func getTopicResult(for topic: Topic) -> Results {
         // Search for the result matching the topic's title in the viewModel
         return viewModel.results.first(where: { $0.topicTitle == topic.title }) ?? Results(topicTitle: topic.title, quizScore: 0, isQuizCompleted: false, isLessonRead: false, isFlashcardsCompleted: false)
     }
