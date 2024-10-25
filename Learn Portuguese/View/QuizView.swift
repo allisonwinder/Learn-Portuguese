@@ -92,7 +92,11 @@ struct QuizView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
-        Text("Quiz Completed: \(viewModel.results(for: topic.title).isQuizCompleted)")
+        Button {
+            viewModel.toggleQuizCompleted(for: topic.title)
+        } label: {
+            Text("Quiz Completed: \(viewModel.results(for: topic.title).isQuizCompleted)")
+        }
         .font(.subheadline)
         .foregroundColor(.purple)
     }

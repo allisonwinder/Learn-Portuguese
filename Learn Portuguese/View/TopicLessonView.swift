@@ -13,37 +13,66 @@ struct TopicLessonView: View {
     let viewModel: LanguageViewModel
     
     var body: some View {
-        VStack(spacing: 20) {
-                    Text("Learn this \(topic.title) lesson!")
-                        .font(.title)
-                    Text("\(topic.lesson)")
-                        .padding()
-            NavigationLink(destination: QuizView( topic: topic )) {
+        ScrollView {
+            VStack( spacing: TopicLessonConstants.paddingBetweenItems) {
+                
+                Text("Learn this \(topic.title) lesson!")
+                    .font(.title)
+                    .padding(.bottom)
+                
+                Text("\(topic.lesson)")
+                    .font(.body)
+                    .padding()
+                    .background(.white)
+                    .cornerRadius(Constants.cornerRadius)
+                    .shadow(color: .black.opacity(TopicLessonConstants.opacity), radius: 5, x: 0, y: 4)
+                    .lineSpacing(5)
+                
+                Toggle(isOn: Binding(
+                    get: { viewModel.results(for: topic.title).isLessonRead },
+                    set: { newValue in
+                        viewModel.toggleLessonRead(for: topic.title)
+                    }
+                )) {
+                    Text("Lesson read")
+                        .font(.headline)
+                }
+                .padding()
+                .background(.gray.opacity(TopicLessonConstants.opacity))
+                .cornerRadius(Constants.cornerRadius)
+                
+                VStack(spacing: 15) {
+                    NavigationLink(destination: QuizView(topic: topic)) {
                         Text("Take the quiz")
                             .font(.headline)
                             .padding()
+                            .frame(maxWidth: .infinity)
                             .background(.blue)
                             .foregroundColor(.white)
-                            .cornerRadius(8)
+                            .cornerRadius(Constants.cornerRadius)
                     }
-            NavigationLink(destination: FlashcardView( viewModel: LanguageViewModel() , topic: topic)) {
-                Text("Practice with flashcards")
-                    .font(.headline)
-                    .padding()
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            Button {
-                viewModel.toggleLessonRead(for: topic.title)
-            }
-            label : {
-                Text("Lesson read: \(viewModel.results(for: topic.title).isLessonRead)")
-                    .font(.subheadline)
-            }
+                    
+                    NavigationLink(destination: FlashcardView(viewModel: viewModel, topic: topic)) {
+                        Text("Practice with flashcards")
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(Constants.cornerRadius)
+                    }
                 }
-                .padding()
+                .padding(.top, TopicLessonConstants.paddingBetweenItems)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
+}
+
+private struct TopicLessonConstants {
+    static let paddingBetweenItems: CGFloat = 20
+    static let opacity: CGFloat = 0.2
 }
 
 #Preview {
