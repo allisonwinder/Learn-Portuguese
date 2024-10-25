@@ -59,7 +59,7 @@ struct TopicCell: View {
                     
                     InfoRow (
                         label: "Quiz High Score",
-                        value: String(format: "%.2f", HighScore(topic.title)),
+                        value: String(format: Constants.scoreFormat, HighScore(topic.title)),
                         icon: "star.fill")
                 }
             }
@@ -67,7 +67,7 @@ struct TopicCell: View {
             .frame(maxWidth: .infinity)
             .background(.white)
             .cornerRadius( Constants.cornerRadius )
-            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+            .shadow(color: .black.opacity( Constants.opacity ), radius: 8, x: 0, y: 4)
         }
     }
     

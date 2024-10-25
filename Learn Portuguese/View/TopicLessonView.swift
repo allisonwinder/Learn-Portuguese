@@ -25,7 +25,7 @@ struct TopicLessonView: View {
                     .padding()
                     .background(.white)
                     .cornerRadius(Constants.cornerRadius)
-                    .shadow(color: .black.opacity(TopicLessonConstants.opacity), radius: 5, x: 0, y: 4)
+                    .shadow(color: .black.opacity(Constants.opacity), radius: 5, x: 0, y: 4)
                     .lineSpacing(5)
                 
                 Toggle(isOn: Binding(
@@ -38,7 +38,7 @@ struct TopicLessonView: View {
                         .font(.headline)
                 }
                 .padding()
-                .background(.gray.opacity(TopicLessonConstants.opacity))
+                .background(.gray.opacity(Constants.opacity))
                 .cornerRadius(Constants.cornerRadius)
                 
                 VStack(spacing: 15) {
@@ -72,7 +72,6 @@ struct TopicLessonView: View {
 
 private struct TopicLessonConstants {
     static let paddingBetweenItems: CGFloat = 20
-    static let opacity: CGFloat = 0.2
 }
 
 #Preview {

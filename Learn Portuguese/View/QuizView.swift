@@ -4,10 +4,11 @@
 //
 //  Created by IS 543 on 10/15/24.
 //
+
 import SwiftUI
 
 struct QuizView: View {
-    @State var topic: Topic
+    
     @State private var currentQuestionIndex = 0
     @State private var score = 0.0
     @State private var isAnswerCorrect = false
@@ -21,99 +22,122 @@ struct QuizView: View {
     @State private var questionsCorrect = 0
     
     let viewModel = LanguageViewModel()
+    var topic: Topic
     
     var body: some View {
-        VStack {
-            // Show the current question
-            Text("Question \(currentQuestionIndex + 1) of \(topic.QuizQuestions.count)")
-                .font(.headline)
+        
+        ScrollView {
+            VStack(spacing: QuizConstants.itemSpacing) {
+                
+                Text("Question \(currentQuestionIndex + 1) of \(topic.QuizQuestions.count)")
+                    .font(.headline)
+                    .padding(.top)
+
+                Text(topic.QuizQuestions[currentQuestionIndex].question)
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .background(Color(UIColor.systemGray6))
+                    .cornerRadius(Constants.cornerRadius)
+                    .shadow(
+                        color: .gray.opacity(Constants.opacity), radius: 5, x: 0, y: 4)
+
+                VStack(spacing: QuizConstants.itemSpacing) {
+                    
+                    ForEach(topic.QuizQuestions[currentQuestionIndex].options, id: \.self) { option in
+                        Button(action: {
+                            selectedOption = option
+                            isAnswerCorrect = (option == topic.QuizQuestions[currentQuestionIndex].correctAnswer)
+                            handleAnswer()
+                        })
+                        {
+                            Text(option)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(selectedOption == option ? (isAnswerCorrect ? .green : .red) : .blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(Constants.cornerRadius)
+                                .padding(.horizontal)
+                                .scaleEffect(isAnswerCorrect && selectedOption == option ? isCorrectAnimation ? 1.15 : 1 : isWrongAnimation && selectedOption == option ? 0.85 : 1)
+                                .animation(.spring(), value: isCorrectAnimation || isWrongAnimation)
+                        }
+                    }
+                }
+
+                Text("Score: \(String(format: Constants.scoreFormat, score))")
+                    .font(.title)
+                    .padding()
+                
+                Pie(
+                    startAngle: angle(for: 0),
+                    endAngle: angle(for: -animatedBonusRemaining)
+                )
+                .onAppear {
+                    startTimer()
+                }
+                .foregroundStyle(.orange)
+                .opacity(0.4)
                 .padding()
 
-            Text(topic.QuizQuestions[currentQuestionIndex].question)
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding()
-
-            // Show the options as buttons
-            ForEach(topic.QuizQuestions[currentQuestionIndex].options, id: \.self) { option in
                 Button(action: {
-                    selectedOption = option
-                    isAnswerCorrect = (option == topic.QuizQuestions[currentQuestionIndex].correctAnswer)
-                    handleAnswer()
+                    nextQuestion()
                 }) {
-                    Text(option)
+                    Text(currentQuestionIndex < topic.QuizQuestions.count - 1 ? "Next Question" : "Finish Quiz")
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(selectedOption == option ? (isAnswerCorrect ? Color.green : Color.red) : Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                        .scaleEffect(isAnswerCorrect && selectedOption == option ? isCorrectAnimation ? 1.15 : 1 : isWrongAnimation && selectedOption == option ? 0.8 : 1)
-                        .animation(.spring(), value: isCorrectAnimation || isWrongAnimation)
+                        .background( .orange )
+                        .foregroundColor( .white )
+                        .cornerRadius(Constants.cornerRadius)
                 }
-            }
-
-            // Display the current score
-            Text("Score: \(String(format: "%.2f", score))")
-                .font(.title)
                 .padding()
 
-            // Animated pie for bonus time
-            Pie(
-                startAngle: angle(for: 0),
-                endAngle: angle(for: -animatedBonusRemaining)
-            )
-            .onAppear {
-                startTimer()
-            }
-            .foregroundStyle(.orange)
-            .opacity(0.4)
-            .padding()
-
-            Spacer()
-
-            // Button to go to next question or finish quiz
-            Button(action: {
-                nextQuestion()
-            }) {
-                Text(currentQuestionIndex < topic.QuizQuestions.count - 1 ? "Next Question" : "Finish Quiz")
-                    .padding()
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                Toggle(isOn: completionBinding) {
+                    Text("Quiz Completed")
+                }
+                .toggleStyle(SwitchToggleStyle(tint: .green))
+                .padding()
+                .alert(isPresented: $showScore) {
+                    Alert(
+                        title: Text("Quiz Completed"),
+                        message: Text("Your score: \(String(format: Constants.scoreFormat, score))"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+                .background(.gray.opacity(Constants.opacity))
+                .cornerRadius(Constants.cornerRadius)
+                
             }
             .padding()
         }
-        .padding()
-        .alert(isPresented: $showScore) {
-            Alert(
-                title: Text("Quiz Completed"),
-                message: Text("Your score: \(String(format: "%.2f", score))"),
-                dismissButton: .default(Text("OK"))
-            )
-        }
-        Button {
-            viewModel.toggleQuizCompleted(for: topic.title)
-        } label: {
-            Text("Quiz Completed: \(viewModel.results(for: topic.title).isQuizCompleted)")
-        }
-        .font(.subheadline)
-        .foregroundColor(.purple)
     }
 
-
-    // Function to calculate the angle for the pie
+    
+    
     private func angle(for percentOfCircle: Double) -> Angle {
         Angle.degrees(percentOfCircle * 360 - 90)
     }
+    
+    private var completionBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.results(for: topic.title).isQuizCompleted },
+            set: { newValue in
+                if newValue {
+                    if isAllCorrect() {
+                        viewModel.toggleQuizCompleted(for: topic.title)
+                    }
+                } else {
+                    viewModel.toggleQuizCompleted(for: topic.title)
+                }
+            }
+        )
+    }
 
-    // Function to handle the answer selection
     private func handleAnswer() {
         viewModel.handleAnswer(isAnswerCorrect: isAnswerCorrect)
+        
         if isAnswerCorrect {
-            let bonus = remainingTime // Bonus based on remaining time
-            score += 10.0 + bonus
-            stopTimer() // Stop the timer when the correct answer is given
+            score += QuizConstants.questionValue + remainingTime
+            stopTimer()
             triggerCorrectAnimation()
             questionsCorrect += 1
         } else {
@@ -121,21 +145,22 @@ struct QuizView: View {
         }
     }
 
-    // Function to move to the next question or finish the quiz
     private func nextQuestion() {
         if currentQuestionIndex < topic.QuizQuestions.count - 1 {
             currentQuestionIndex += 1
             resetState()
         } else {
             showScore = true
-            if questionsCorrect == topic.QuizQuestions.count {
+            
+            if isAllCorrect() {
                 viewModel.toggleQuizCompleted(for: topic.title)
             }
-            viewModel.quizHighScore(for: topic.title, score: Double(score))
+            
+            viewModel.quizHighScore(for: topic.title, score: score)
+            
         }
     }
 
-    // Reset the state for the next question
     private func resetState() {
         selectedOption = nil
         isAnswerCorrect = false
@@ -146,39 +171,49 @@ struct QuizView: View {
         isWrongAnimation = false
     }
 
-    // Function to start the timer
     private func startTimer() {
         animatedBonusRemaining = 1.0
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        
+        timer = Timer.scheduledTimer(
+            withTimeInterval: 0.1, repeats: true) { _ in
             if remainingTime > 0 {
                 remainingTime -= 0.1
                 animatedBonusRemaining = remainingTime / 10.0
             } else {
-                stopTimer() 
+                stopTimer()
             }
         }
     }
 
-    // Function to stop the timer
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-    
-    // Trigger correct answer animation
+
     private func triggerCorrectAnimation() {
-        withAnimation(.easeIn(duration: 0.5)) {
+        withAnimation(.easeIn(duration: QuizConstants.animationDuration)) {
             isCorrectAnimation = true
         }
     }
 
-    // Trigger wrong answer animation
     private func triggerWrongAnimation() {
-        withAnimation(.easeOut(duration: 0.3)) {
+        withAnimation(.easeOut(duration: QuizConstants.animationDuration)) {
             isWrongAnimation = true
         }
     }
+
+    private func isAllCorrect() -> Bool {
+        questionsCorrect == topic.QuizQuestions.count
+    }
+    
+    private struct QuizConstants {
+        static let animationDuration: Double = 0.5
+        static let itemSpacing: CGFloat = 10.0
+        static let questionValue: Double = 10.0
+    }
 }
+
+
 
 
 #Preview {

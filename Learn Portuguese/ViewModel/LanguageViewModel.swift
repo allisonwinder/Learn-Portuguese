@@ -42,8 +42,6 @@ import Foundation
     
     //MARK: - User Intents
     
-    
-    
     func handleAnswer(isAnswerCorrect: Bool) {
         if isAnswerCorrect {
             Task {
@@ -71,85 +69,7 @@ import Foundation
     func quizHighScore(for title: String, score: Double) {
         lessonPlan.quizHighScore(for: title, score: score )
     }
-    
-//    init() {
-//        self.results = [
-//            Results(
-//                topicTitle: "Basic Greetings and Farewells",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Common Phrases",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Numbers (1-10)",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Colors",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Family Members",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Food and Drink",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Common Adjectives",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Days of the Week",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Weather Vocabulary",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            ),
-//            Results(
-//                topicTitle: "Common Verbs",
-//                quizScore: 0,
-//                isQuizCompleted: false,
-//                isLessonRead: false,
-//                isFlashcardsCompleted: false
-//            )
-//        ]
- //   }
-    
-    
-    
-    
+
     
     
     //MARK: - Helpers
