@@ -5,6 +5,8 @@
 //  Created by IS 543 on 10/10/24.
 //
 
+// The UI design was Chat GPT, I changed some things to look more how I wanted it to look. But the base is Chat GPT
+
 import SwiftUI
 
 struct LanguageLearningView: View {

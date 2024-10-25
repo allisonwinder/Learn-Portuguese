@@ -5,6 +5,8 @@
 //  Created by IS 543 on 10/15/24.
 //
 
+// Chat GPT wrote the Card UI and some of the logic to get the card rotation correct. It also made the toggle not work when the quiz has not been completed. However, I made adjustments so it would work when it was completed.
+
 import SwiftUI
 
 struct FlashcardView: View {

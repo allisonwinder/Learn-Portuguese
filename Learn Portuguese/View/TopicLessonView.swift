@@ -5,6 +5,8 @@
 //  Created by IS 543 on 10/18/24.
 //
 
+// Chat GPT wrote the UI for this page with minor adjustments by me. I wrote the buttons and the toggle.
+
 import SwiftUI
 
 struct TopicLessonView: View {

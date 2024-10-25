@@ -5,6 +5,8 @@
 //  Created by IS 543 on 10/15/24.
 //
 
+// Chat GPT wrote most of my the UI and the logic to count a question as complete and the animation. Honestly, Chat wrote a lot of this page because I struggled with it for a long time. I just corrected some of the scoring and I wrote the quiz completion part.
+
 import SwiftUI
 
 struct QuizView: View {

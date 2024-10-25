@@ -9,8 +9,6 @@ import Foundation
 
 @Observable class LanguageViewModel {
     
-    //MARK: - CONSTANTS
-    
     //MARK: - Properties
     private var soundPlayer = SoundPlayer()
     
@@ -67,11 +65,6 @@ import Foundation
     func quizHighScore(for title: String, score: Double) {
         lessonPlan.quizHighScore(for: title, score: score )
     }
-
-    
-    //MARK: - Helpers
-    
-    //MARK: - Private Helpers
 
 }
 

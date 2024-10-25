@@ -449,6 +449,4 @@ struct PortugueseLessonPlan: LessonPlan {
                 )
             ]
     }
-    
-    //needswork: implements helpers to update progress as needed
 }
