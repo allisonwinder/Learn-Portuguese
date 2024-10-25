@@ -191,13 +191,13 @@ struct QuizView: View {
     }
 
     private func triggerCorrectAnimation() {
-        withAnimation(.easeIn(duration: QuizConstants.animationDuration)) {
+        withAnimation(.easeIn(duration: Constants.animationDuration)) {
             isCorrectAnimation = true
         }
     }
 
     private func triggerWrongAnimation() {
-        withAnimation(.easeOut(duration: QuizConstants.animationDuration)) {
+        withAnimation(.easeOut(duration: Constants.animationDuration)) {
             isWrongAnimation = true
         }
     }
@@ -207,7 +207,6 @@ struct QuizView: View {
     }
     
     private struct QuizConstants {
-        static let animationDuration: Double = 0.5
         static let itemSpacing: CGFloat = 10.0
         static let questionValue: Double = 10.0
     }

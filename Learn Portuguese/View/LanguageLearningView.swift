@@ -88,7 +88,6 @@ struct TopicCell: View {
         return viewModel.results(for: topic).isQuizCompleted
     }
     
-
 }
 
 struct ProgressRow: View {

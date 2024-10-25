@@ -38,8 +38,6 @@ import Foundation
         return resultsRecord
     }
     
-    
-    
     //MARK: - User Intents
     
     func handleAnswer(isAnswerCorrect: Bool) {
@@ -70,7 +68,6 @@ import Foundation
         lessonPlan.quizHighScore(for: title, score: score )
     }
 
-    
     
     //MARK: - Helpers
     

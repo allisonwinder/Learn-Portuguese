@@ -8,72 +8,97 @@
 import SwiftUI
 
 struct FlashcardView: View {
-    @State var viewModel: LanguageViewModel
+    
     @State private var isFlipped = false
-    @State private var currentIndex = 0 // To track the current word in the vocabulary list
+    @State private var currentIndex = 0
     @State var shuffledCards: [VocabularyWord] = []
     @State var contentRotation = 0.0
+
+    let viewModel: LanguageViewModel
     let topic: Topic
-    //var result: Results
 
     var body: some View {
-        
-        TabView(selection: $currentIndex) {
-            ForEach(0..<shuffledCards.count, id: \.self) { index in
-                ZStack {
-                    // Background gradient
-                    let gradientColors = isFlipped ? [Color.blue, Color.purple] : [Color.green, Color.teal]
-                    
-                    VStack {
-                        Text(isFlipped ? shuffledCards[index].word : shuffledCards[index].translation)
-                            .font(.largeTitle)
-                            .bold()
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                            .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
+        VStack {
+            
+            TabView(selection: $currentIndex) {
+                
+                ForEach(0..<shuffledCards.count, id: \.self) { index in
+                    ZStack {
+                        
+                        VStack {
+                            Text(isFlipped ? shuffledCards[index].word : shuffledCards[index].translation)
+                                .font(.largeTitle)
+                                .bold()
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .rotation3DEffect(.degrees(contentRotation), axis: (x: 0, y: 1, z: 0))
+                        }
+                        .frame(width: FlashcardConstants.width, height: FlashcardConstants.height)
+                        .background(LinearGradient(gradient: Gradient(colors: gradiantColors()), startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(Constants.cornerRadius + 8.0)
+                        .shadow(radius: 10)
+                        .padding(.horizontal, 20)
+                        .rotation3DEffect(
+                            .degrees(isFlipped ? FlashcardConstants.flipped : FlashcardConstants.notFlipped),
+                            axis: (x: 0, y: 1, z: 0)
+                        )
                     }
-                    .frame(width: 300, height: 200) // Adjust the frame size for a compact look
-                    .background(LinearGradient(gradient: Gradient(colors: gradientColors), startPoint: .top, endPoint: .bottom))
-                    .cornerRadius(20)
-                    .shadow(radius: 10)
-                    .padding(.horizontal, 20)
-                    .rotation3DEffect(
-                        .degrees(isFlipped ? 180 : 0),
-                        axis: (x: 0, y: 1, z: 0)
-                    )
+                    .tag(index)
                 }
-                .tag(index)
             }
-        }
-        .tabViewStyle(.page)
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
-        .onTapGesture {
-            withAnimation(Animation.linear(duration: 0.5)) {
-                contentRotation = isFlipped ? 0.0 : 180.0
-                isFlipped.toggle()
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .onTapGesture {
+                withAnimation(Animation.linear(duration: Constants.animationDuration)) {
+                    contentRotation = isFlipped ? FlashcardConstants.notFlipped : FlashcardConstants.flipped
+                    isFlipped.toggle()
+                }
             }
-        }
-        .onAppear {
-            // Optionally shuffle cards on appear if desired
-            shuffledCards = topic.vocabulary.shuffled()
-        }
-        .onChange(of: currentIndex) {
-            // Reset the flip state when the user swipes to a new card
-            withAnimation {
-                isFlipped = false
-                contentRotation = isFlipped ? 180.0 : 0
+            .onAppear {
+                shuffledCards = topic.vocabulary.shuffled()
             }
-        }
-        Button {
-            viewModel.toggleFlashcardsCompleted(for: topic.title)
-        }
-        label : {
-            Text("Flashcards Completed: \(viewModel.results(for: topic.title).isFlashcardsCompleted)")
-                .font(.subheadline)
+            .onChange(of: currentIndex) {
+                withAnimation {
+                    isFlipped = false
+                    contentRotation = isFlipped ? FlashcardConstants.flipped : FlashcardConstants.notFlipped
+                }
+            }
+
+            VStack {
+                Toggle(isOn: Binding(
+                    get: { viewModel.results(for: topic.title).isFlashcardsCompleted },
+                    set: { newValue in
+                        viewModel.toggleFlashcardsCompleted(for: topic.title)
+                    }
+                )) {
+                    Text("Flashcards Completed")
+                        .font(.headline)
+                        .padding(.vertical, 8)
+                }
+                .padding()
+                .background(.gray.opacity(Constants.opacity))
+                .cornerRadius(Constants.cornerRadius)
+                .shadow(radius: 4)
+            }
+            .padding(.top, 20)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 30)
         }
     }
+    
+    private func gradiantColors() -> [Color] {
+        return isFlipped ? [.blue, .purple] : [.green, .teal]
+    }
+    
+    private struct FlashcardConstants {
+        static let flipped = 180.0
+        static let notFlipped = 0.0
+        static let width: CGFloat = 300
+        static let height: CGFloat = 200
+    }
 }
+
 
 #Preview {
     let exampleTopic = Topic(
